@@ -26,17 +26,23 @@ def signup():
     #check that username isn't already taken
     user = get_user(request.form['username'])
     if user == None:
-        add_user(request.form['username'],request.form['password'])
+        add_user(request.form['username'],request.form['password'],request.form['fav_food'])
     return home()
+
+@app.route('/favfood', methods=['POST'])
 
 
 @app.route('/logged-in')
 def logged_in():
-    return render_template('logged.html')
+    update_fav_food("pizza", "s")
+    return render_template('logged.html', favfood= get_user(login_session['name']).fav_food)
+
 
 
 @app.route('/logout')
 def logout():
+    login_session['name'] = None
+    login_session['logged_in'] = False
     return home()
 
 
